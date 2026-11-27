@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>KioskInventur Pro</title>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="KioskInventur" />
+  <link id="appleTouchIconLink" rel="apple-touch-icon" href="" />
+  <link id="faviconLink" rel="icon" href="" />
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-alt: #f1f5f9;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --header-bg: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #f8fafc;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .app-header {
+      background: #0f172a;
+      color: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .logo-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #2563eb;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+      padding: 0;
+      color: #ffffff;
+    }
+
+    .logo-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #ffffff;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: #cbd5e1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-sub span {
+      cursor: pointer;
+      text-decoration: underline dotted;
+    }
+
+    .nav-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #1e293b;
+      padding: 4px;
+      border-radius: 10px;
+    }
+
+    .btn {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+    }
+
+    .btn-dark {
+      background: #0f172a;
+      border-color: #0f172a;
+      color: #ffffff;
+    }
+
+    .btn-dark:hover {
+      background: #1e293b;
+    }
+
+    .btn-danger {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #b91c1c;
+    }
+
+    .btn-sm {
+      padding: 5px 9px;
+      font-size: 12px;
+    }
+
+    .tab-btn {
+      border: none;
+      background: transparent;
+      color: #cbd5e1;
+      padding: 7px 12px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .kpi-val {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 4px;
+    }
+
+    .kpi-hint {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: #f1f5f9;
+      border-bottom: 1px solid #cbd5e1;
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .card-body {
+      padding: 14px 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .form-grid-top {
+        display: grid;
+        grid-template-columns: 2.2fr 1.2fr;
+        gap: 12px;
+      }
+      .form-grid-bottom {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1.6fr;
+        gap: 12px;
+        align-items: end;
+      }
+    }
+
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .field-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .link-btn {
+      background: none;
+      border: none;
+      color: #2563eb;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .input, .select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #94a3b8;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 14px;
+    }
+
+    .input:focus, .select:focus {
+      outline: 2px solid #2563eb;
+      border-color: #2563eb;
+    }
+
+    .qty-stepper {
+      display: flex;
+      align-items: center;
+    }
+
+    .qty-stepper button {
+      padding: 8px 11px;
+      border: 1px solid #94a3b8;
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .qty-stepper button:first-child {
+      border-radius: 8px 0 0 8px;
+      border-right: none;
+    }
+
+    .qty-stepper button:last-child {
+      border-radius: 0 8px 8px 0;
+      border-left: none;
+    }
+
+    .qty-stepper input {
+      border-radius: 0;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .pills-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+    }
+
+    .pill-btn {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .pill-btn.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #ffffff;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      color: #0f172a;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #f8fafc;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #475569;
+      font-weight: 700;
+    }
+
+    .num {
+      text-align: right;
+    }
+
+    .inline-input {
+      width: 100%;
+      min-width: 130px;
+      padding: 5px 7px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 13px;
+    }
+
+    .inline-qty {
+      width: 66px;
+      padding: 5px 6px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .inline-price {
+      width: 82px;
+      padding: 5px 6px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .autocomplete-box {
+      position: relative;
+    }
+
+    .autocomplete-list {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      background: #ffffff;
+      border: 1px solid #94a3b8;
+      border-radius: 8px;
+      margin-top: 4px;
+      z-index: 25;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .autocomplete-item {
+      width: 100%;
+      text-align: left;
+      background: #ffffff;
+      color: #0f172a;
+      border: none;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 8px 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .autocomplete-item:hover {
+      background: #eff6ff;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .list-row-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+    }
+
+    .print-sheet {
+      background: #ffffff;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .print-group {
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-box">
+        <button type="button" class="logo-btn" onclick="openSettingsModal()" title="Logo &amp; Einstellungen öffnen">
+          <img id="headerLogoImg" src="" alt="Logo" class="hidden" />
+          <span id="headerDefaultIcon" style="font-weight:700;font-size:15px;">KI</span>
+        </button>
+        <div style="min-width:0;">
+          <div class="brand-title">KioskInventur Pro</div>
+          <div class="brand-sub">
+            <span id="headerStoreName" onclick="editStoreName()" title="Klicken zum Ändern">Kiosk Hauptbahnhof</span>
+            &bull;
+            <span id="headerDate">Stichtag: Heute</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button type="button" id="tab-capture" class="tab-btn active" onclick="switchTab('capture')">Erfassung &amp; Bestand</button>
+        <button type="button" id="tab-print" class="tab-btn" onclick="switchTab('print')">Druck &amp; Export</button>
+      </div>
+
+      <div style="display:flex;gap:6px;">
+        <button type="button" class="btn btn-sm" onclick="openSettingsModal()">Logo &amp; Gruppen</button>
+        <button type="button" class="btn btn-sm" onclick="openCsvModal()">CSV</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- VIEW 1: CAPTURE & INVENTORY -->
+  <main id="view-capture" class="container">
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Erfasste Artikel (<span id="kpiGroupLabel">Alle Gruppen</span>)</div>
+        <div class="kpi-val tabular-nums" id="kpiArticles">0</div>
+        <div class="kpi-hint">Positionen</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Gezählte Gesamtmenge</div>
+        <div class="kpi-val tabular-nums" id="kpiTotalUnits">0</div>
+        <div class="kpi-hint">Einzelstücke</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Inventurwert (EK Gesamt)</div>
+        <div class="kpi-val tabular-nums" id="kpiTotalValue">0,00 €</div>
+        <div class="kpi-hint">Einkaufspreis-Summe</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Aktive Warengruppen</div>
+        <div class="kpi-val tabular-nums" id="kpiActiveGroups">0</div>
+        <div class="kpi-hint" id="kpiTotalGroupsHint">von 0 Kategorien</div>
+      </div>
+    </div>
+
+    <!-- QUICK ENTRY -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Schnellerfassung</h2>
+        <button type="button" class="btn btn-sm" onclick="openSettingsModal()">Warengruppen &amp; Logo verwalten</button>
+      </div>
+      <div class="card-body">
+        <form id="entryForm" onsubmit="handleSaveItem(event)" class="form-grid">
+          <div class="form-grid-top">
+            <div class="autocomplete-box">
+              <label class="field-label" for="inputName">Artikelbezeichnung *</label>
+              <input type="text" id="inputName" class="input" required autocomplete="off"
+                placeholder="z. B. Marlboro Red 20er, Cola 0,5l..." oninput="handleNameSearch(this.value)" />
+              <div id="autocompleteList" class="autocomplete-list hidden"></div>
+            </div>
+
+            <div>
+              <div class="field-top-row">
+                <label class="field-label" for="inputGroup" style="margin:0;">Warengruppe *</label>
+                <button type="button" class="link-btn" onclick="addNewGroupInline()">+ Neue Gruppe</button>
+              </div>
+              <select id="inputGroup" class="select" required></select>
+            </div>
+          </div>
+
+          <div class="form-grid-bottom">
+            <div>
+              <label class="field-label" for="inputQty">Menge (Stück) *</label>
+              <div class="qty-stepper">
+                <button type="button" onclick="adjustInputQty(-1)">−</button>
+                <input type="number" id="inputQty" class="input" value="1" min="0" step="1" required oninput="updateCalculatedTotal()" />
+                <button type="button" onclick="adjustInputQty(1)">+</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="field-label" for="inputPrice">EK / Stück (€)</label>
+              <input type="number" id="inputPrice" class="input" value="0.00" min="0" step="0.01" />
+            </div>
+
+            <div style="display:flex;gap:8px;">
+              <button type="submit" class="btn btn-primary" style="flex:1;" id="submitBtnText">Erfassen (1 Stk.)</button>
+              <button type="button" class="btn" onclick="resetForm()">Reset</button>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:#475569;">
+            <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="checkbox" id="addToExistingCheck" checked />
+              <span>Bei gleichem Artikel in derselben Warengruppe Menge automatisch <strong>hinzuaddieren</strong></span>
+            </label>
+            <span id="formFeedback" style="color:#15803d;font-weight:600;"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- GROUP TABS -->
+    <div class="pills-row" id="groupFilterPills"></div>
+
+    <!-- FILTER & QUICK PRINT -->
+    <div class="filter-bar">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <input type="text" id="searchInput" class="input" style="width:220px;" placeholder="Artikel suchen..." oninput="renderInventoryTable()" />
+      </div>
+
+      <button type="button" class="btn btn-primary" onclick="goToPrintWithCurrentFilter()">
+        <span id="quickPrintBtnLabel">Alle Warengruppen drucken</span>
+      </button>
+    </div>
+
+    <!-- INVENTORY TABLE -->
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Artikelbezeichnung</th>
+              <th>Warengruppe</th>
+              <th class="num">Bestand</th>
+              <th class="num">EK / Stk.</th>
+              <th class="num">Gesamtwert</th>
+              <th style="text-align:center;">Aktion</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody"></tbody>
+          <tfoot id="inventoryTableFoot" style="background:#f8fafc;font-weight:700;"></tfoot>
+        </table>
+      </div>
+      <div id="emptyState" class="hidden" style="padding:28px;text-align:center;color:#475569;">
+        Keine Artikel in dieser Auswahl vorhanden.
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 2: PRINT & EXPORT -->
+  <main id="view-print" class="container hidden">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Drucken &amp; Export (Einzelne Warengruppe oder Alle zusammen)</h2>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="btn btn-sm" onclick="exportCsv()">CSV Export</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="printDirect()">Drucken / PDF</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+          <div>
+            <label class="field-label" for="printScopeSelect">Was soll gedruckt werden?</label>
+            <select id="printScopeSelect" class="select" onchange="renderPrintPreview()">
+              <option value="ALL_GROUPED">Alle Warengruppen zusammen (gruppiert)</option>
+              <option value="ALL_FLAT">Alle Warengruppen zusammen (Gesamtliste)</option>
+              <option value="ALL_SUMMARY">Nur Warengruppen-Summen (ohne Einzelartikel)</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="printStoreName">Kiosk-Name</label>
+            <input type="text" id="printStoreName" class="input" oninput="syncStoreName(this.value)" />
+          </div>
+          <div>
+            <label class="field-label" for="printDateInput">Stichtag</label>
+            <input type="date" id="printDateInput" class="input" onchange="renderPrintPreview()" />
+          </div>
+          <div>
+            <label class="field-label" for="printAuditorName">Prüfer / Zähler</label>
+            <input type="text" id="printAuditorName" class="input" placeholder="Optional" oninput="renderPrintPreview()" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="printSheet" class="print-sheet"></div>
+  </main>
+
+  <!-- EDIT MODAL -->
+  <div id="editModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="card-header">
+        <h3 class="card-title">Artikel bearbeiten</h3>
+        <button type="button" class="btn btn-sm" onclick="closeEditModal()">X</button>
+      </div>
+      <form onsubmit="saveEditedItem(event)" class="card-body" style="display:grid;gap:12px;">
+        <input type="hidden" id="editId" />
+        <div>
+          <label class="field-label" for="editName">Artikelbezeichnung *</label>
+          <input type="text" id="editName" class="input" required />
+        </div>
+        <div>
+          <label class="field-label" for="editGroup">Warengruppe</label>
+          <select id="editGroup" class="select"></select>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label class="field-label" for="editQty">Bestand (Stück)</label>
+            <input type="number" id="editQty" class="input" min="0" step="1" required />
+          </div>
+          <div>
+            <label class="field-label" for="editPrice">EK / Stück (€)</label>
+            <input type="number" id="editPrice" class="input" min="0" step="0.01" required />
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:6px;">
+          <button type="button" class="btn" onclick="closeEditModal()">Abbrechen</button>
+          <button type="submit" class="btn btn-primary">Speichern</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settingsModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="card-header">
+        <h3 class="card-title">Logo, Warengruppen &amp; Kiosk-Name</h3>
+        <button type="button" class="btn btn-sm" onclick="closeSettingsModal()">Schließen</button>
+      </div>
+      <div class="card-body" style="display:grid;gap:16px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;background:#f8fafc;padding:12px;border-radius:10px;border:1px solid #cbd5e1;">
+          <div>
+            <label class="field-label" for="settingsStoreNameInput">Kiosk-Name</label>
+            <input type="text" id="settingsStoreNameInput" class="input" oninput="syncStoreName(this.value)" />
+          </div>
+          <div>
+            <label class="field-label">Kiosk-Logo (App &amp; Bericht)</label>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:48px;height:48px;border-radius:8px;border:1px solid #94a3b8;background:#ffffff;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <img id="settingsLogoPreview" src="" alt="Vorschau" class="hidden" style="width:100%;height:100%;object-fit:cover;" />
+                <span id="settingsLogoPlaceholder" style="font-size:11px;color:#64748b;">Leer</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px;">
+                <label class="btn btn-primary btn-sm" style="cursor:pointer;">
+                  Logo wählen
+                  <input type="file" id="logoFileInput" accept="image/*" onchange="handleLogoUpload(event)" style="display:none;" />
+                </label>
+                <button type="button" class="link-btn" onclick="removeLogo()">Logo entfernen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="field-top-row">
+            <strong>Warengruppen</strong>
+            <span id="groupCountBadge" style="font-size:12px;color:#64748b;">0</span>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:8px;">
+            <input type="text" id="newGroupInput" class="input" placeholder="Neue Warengruppe..."
+              onkeydown="if(event.key==='Enter'){event.preventDefault();addGroupFromModal();}" />
+            <button type="button" class="btn btn-primary btn-sm" onclick="addGroupFromModal()">+</button>
+          </div>
+          <div id="settingsGroupList"></div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e2e8f0;padding-top:12px;">
+          <button type="button" class="btn btn-sm" onclick="loadDemoData()">Beispieldaten laden</button>
+          <button type="button" class="btn btn-dark btn-sm" onclick="closeSettingsModal()">Fertig</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CSV MODAL -->
+  <div id="csvModal" class="modal-backdrop hidden">
+    <div class="modal-card" style="max-width:480px;">
+      <div class="card-header">
+        <h3 class="card-title">CSV Import &amp; Export</h3>
+        <button type="button" class="btn btn-sm" onclick="closeCsvModal()">X</button>
+      </div>
+      <div class="card-body" style="display:grid;gap:14px;">
+        <div>
+          <p style="margin:0 0 8px 0;font-size:13px;">Alle erfassten Artikel als CSV-Tabelle für Excel oder Steuerberater herunterladen:</p>
+          <button type="button" class="btn btn-primary" onclick="exportCsv()">CSV herunterladen</button>
+        </div>
+        <div style="border-top:1px solid #e2e8f0;padding-top:12px;">
+          <label class="field-label" for="csvFileInput">CSV importieren (Name;Warengruppe;Menge;EK)</label>
+          <input type="file" id="csvFileInput" accept=".csv,.txt" onchange="importCsvFile(event)" />
+        </div>
+        <div style="display:flex;justify-content:space-between;border-top:1px solid #e2e8f0;padding-top:12px;">
+          <button type="button" class="btn btn-sm" onclick="loadDemoData()">Beispieldaten</button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="clearAllData()">Alles löschen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'kiosk_inventur_pro_v4';
+
+    const DEFAULT_GROUPS = [
+      'Getränke',
+      'Zigaretten & Tabak',
+      'Lebensmittel & Snacks',
+      'Süßwaren',
+      'Presse & Zeitschriften',
+      'E-Zigaretten & Vapes',
+      'Non-Food'
+    ];
+
+    const DEMO_ITEMS = [
+      { id: '1', name: 'Red Bull 0,25l Dose', group: 'Getränke', qty: 48, price: 0.89 },
+      { id: '2', name: 'Coca-Cola 0,5l', group: 'Getränke', qty: 36, price: 0.72 },
+      { id: '3', name: 'Marlboro Red 20er', group: 'Zigaretten & Tabak', qty: 40, price: 6.45 },
+      { id: '4', name: 'Haribo Goldbären 175g', group: 'Süßwaren', qty: 24, price: 0.68 },
+      { id: '5', name: 'Chipsfrisch Ungarisch', group: 'Lebensmittel & Snacks', qty: 18, price: 1.05 }
+    ];
+
+    let state = {
+      storeName: 'Kiosk Hauptbahnhof',
+      logoDataUrl: '',
+      groups: [...DEFAULT_GROUPS],
+      items: [],
+      selectedGroupFilter: 'ALL'
+    };
+
+    function init() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          state.storeName = parsed.storeName || 'Kiosk Hauptbahnhof';
+          state.logoDataUrl = parsed.logoDataUrl || '';
+          state.groups = Array.isArray(parsed.groups) && parsed.groups.length ? parsed.groups : [...DEFAULT_GROUPS];
+          state.items = Array.isArray(parsed.items) ? parsed.items : [];
+        } catch (e) {
+          state.items = [...DEMO_ITEMS];
+        }
+      } else {
+        state.items = [...DEMO_ITEMS];
+        saveState();
+      }
+
+      document.getElementById('printDateInput').value = new Date().toISOString().split('T')[0];
+      syncStoreName(state.storeName, false);
+      applyLogoUI();
+      populateGroupSelects();
+      renderAll();
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          storeName: state.storeName,
+          logoDataUrl: state.logoDataUrl,
+          groups: state.groups,
+          items: state.items
+        }));
+      } catch (e) {
+        alert('Speicher voll – bitte ein kleineres Logo verwenden.');
+      }
+    }
+
+    function syncStoreName(val, persist = true) {
+      const clean = (val || '').trim() || 'Mein Kiosk';
+      state.storeName = clean;
+      document.getElementById('headerStoreName').textContent = clean;
+      const pInput = document.getElementById('printStoreName');
+      const sInput = document.getElementById('settingsStoreNameInput');
+      if (pInput && pInput.value !== val) pInput.value = val;
+      if (sInput && sInput.value !== val) sInput.value = val;
+      if (persist) {
+        saveState();
+        renderPrintPreview();
+      }
+    }
+
+    function editStoreName() {
+      const next = prompt('Kiosk-Name ändern:', state.storeName);
+      if (next && next.trim()) {
+        syncStoreName(next.trim(), true);
+      }
+    }
+
+    function handleLogoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const size = 256;
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, size, size);
+          const scale = Math.max(size / img.width, size / img.height);
+          const w = img.width * scale;
+          const h = img.height * scale;
+          ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+          state.logoDataUrl = canvas.toDataURL('image/png', 0.9);
+          saveState();
+          applyLogoUI();
+          renderPrintPreview();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeLogo() {
+      state.logoDataUrl = '';
+      document.getElementById('logoFileInput').value = '';
+      saveState();
+      applyLogoUI();
+      renderPrintPreview();
+    }
+
+    function applyLogoUI() {
+      const headerImg = document.getElementById('headerLogoImg');
+      const headerIcon = document.getElementById('headerDefaultIcon');
+      const preview = document.getElementById('settingsLogoPreview');
+      const placeholder = document.getElementById('settingsLogoPlaceholder');
+      const appleIcon = document.getElementById('appleTouchIconLink');
+      const favicon = document.getElementById('faviconLink');
+
+      if (state.logoDataUrl) {
+        headerImg.src = state.logoDataUrl;
+        headerImg.classList.remove('hidden');
+        headerIcon.classList.add('hidden');
+        preview.src = state.logoDataUrl;
+        preview.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+        appleIcon.href = state.logoDataUrl;
+        favicon.href = state.logoDataUrl;
+      } else {
+        headerImg.src = '';
+        headerImg.classList.add('hidden');
+        headerIcon.classList.remove('hidden');
+        preview.src = '';
+        preview.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+        appleIcon.href = '';
+        favicon.href = '';
+      }
+    }
+
+    function formatCurrency(val) {
+      return Number(val || 0).toLocaleString('de-DE', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }) + ' €';
+    }
+
+    function formatInt(val) {
+      return Number(val || 0).toLocaleString('de-DE');
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function adjustInputQty(delta) {
+      const input = document.getElementById('inputQty');
+      const current = parseInt(input.value, 10) || 0;
+      input.value = Math.max(0, current + delta);
+      updateCalculatedTotal();
+    }
+
+    function getCalculatedPieces() {
+      return parseInt(document.getElementById('inputQty').value, 10) || 0;
+    }
+
+    function updateCalculatedTotal() {
+      document.getElementById('submitBtnText').textContent = `Erfassen (${formatInt(getCalculatedPieces())} Stk.)`;
+    }
+
+    function handleNameSearch(query) {
+      const list = document.getElementById('autocompleteList');
+      const q = (query || '').trim().toLowerCase();
+      if (q.length < 2) {
+        list.classList.add('hidden');
+        return;
+      }
+      const matches = state.items.filter(i => i.name.toLowerCase().includes(q)).slice(0, 6);
+      if (!matches.length) {
+        list.classList.add('hidden');
+        return;
+      }
+      list.innerHTML = matches.map(m => `
+        <button type="button" class="autocomplete-item" onclick="selectExistingItem('${m.id}')">
+          <div>
+            <div style="font-weight:700;font-size:13px;">${escapeHtml(m.name)}</div>
+            <div style="font-size:11px;color:#475569;">${escapeHtml(m.group)} &bull; EK ${formatCurrency(m.price)}</div>
+          </div>
+          <span style="font-weight:700;font-size:12px;color:#1d4ed8;">${m.qty} Stk.</span>
+        </button>
+      `).join('');
+      list.classList.remove('hidden');
+    }
+
+    function selectExistingItem(id) {
+      const item = state.items.find(i => i.id === id);
+      if (!item) return;
+      document.getElementById('inputName').value = item.name;
+      document.getElementById('inputGroup').value = item.group;
+      document.getElementById('inputPrice').value = Number(item.price).toFixed(2);
+      document.getElementById('autocompleteList').classList.add('hidden');
+      document.getElementById('inputQty').focus();
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.autocomplete-box')) {
+        document.getElementById('autocompleteList').classList.add('hidden');
+      }
+    });
+
+    function handleSaveItem(e) {
+      e.preventDefault();
+      const name = document.getElementById('inputName').value.trim();
+      const group = document.getElementById('inputGroup').value;
+      const pieces = getCalculatedPieces();
+      const price = parseFloat(document.getElementById('inputPrice').value) || 0;
+      const addToExisting = document.getElementById('addToExistingCheck').checked;
+      if (!name) return;
+
+      const existing = state.items.find(i => i.name.toLowerCase() === name.toLowerCase() && i.group === group);
+      if (existing) {
+        existing.qty = addToExisting ? existing.qty + pieces : pieces;
+        if (price > 0) existing.price = price;
+        document.getElementById('formFeedback').textContent = `Gespeichert: ${existing.name} (${existing.qty} Stk.)`;
+      } else {
+        state.items.unshift({
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+          name,
+          group,
+          qty: pieces,
+          price
+        });
+        document.getElementById('formFeedback').textContent = `Hinzugefügt: ${name} (${pieces} Stk.)`;
+      }
+
+      saveState();
+      renderAll();
+      document.getElementById('inputName').value = '';
+      document.getElementById('inputQty').value = '1';
+      updateCalculatedTotal();
+      document.getElementById('inputName').focus();
+    }
+
+    function resetForm() {
+      document.getElementById('entryForm').reset();
+      document.getElementById('inputQty').value = '1';
+      document.getElementById('inputPrice').value = '0.00';
+      updateCalculatedTotal();
+    }
+
+    function quickChangeQty(id, delta) {
+      const item = state.items.find(i => i.id === id);
+      if (!item) return;
+      item.qty = Math.max(0, item.qty + delta);
+      saveState();
+      renderAll();
+    }
+
+    function directSetQty(id, val) {
+      const item = state.items.find(i => i.id === id);
+      if (!item) return;
+      const n = parseInt(val, 10);
+      item.qty = isNaN(n) || n < 0 ? 0 : n;
+      saveState();
+      renderAll();
+    }
+
+    function directSetPrice(id, val) {
+      const item = state.items.find(i => i.id === id);
+      if (!item) return;
+      const n = parseFloat(val);
+      item.price = isNaN(n) || n < 0 ? 0 : n;
+      saveState();
+      renderAll();
+    }
+
+    function directSetName(id, val) {
+      const item = state.items.find(i => i.id === id);
+      if (!item) return;
+      if ((val || '').trim()) {
+        item.name = val.trim();
+        saveState();
+        renderPrintPreview();
+      } else {
+        renderInventoryTable();
+      }
+    }
+
+    function directSetGroup(id, val) {
+      const item = state.items.find(i => i.id === id);
+      if (!item) return;
+      item.group = val;
+      saveState();
+      renderAll();
+    }
+
+    function deleteItem(id) {
+      const item = state.items.find(i => i.id === id);
+      if (!item) return;
+      if (confirm(`"${item.name}" löschen?`)) {
+        state.items = state.items.filter(i => i.id !== id);
+        saveState();
+        renderAll();
+      }
+    }
+
+    function openEditModal(id) {
+      const item = state.items.find(i => i.id === id);
+      if (!item) return;
+      document.getElementById('editId').value = item.id;
+      document.getElementById('editName').value = item.name;
+      document.getElementById('editGroup').value = item.group;
+      document.getElementById('editQty').value = item.qty;
+      document.getElementById('editPrice').value = Number(item.price).toFixed(2);
+      document.getElementById('editModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('editModal').classList.add('hidden');
+    }
+
+    function saveEditedItem(e) {
+      e.preventDefault();
+      const item = state.items.find(i => i.id === document.getElementById('editId').value);
+      if (!item) return;
+      item.name = document.getElementById('editName').value.trim();
+      item.group = document.getElementById('editGroup').value;
+      item.qty = Math.max(0, parseInt(document.getElementById('editQty').value, 10) || 0);
+      item.price = Math.max(0, parseFloat(document.getElementById('editPrice').value) || 0);
+      saveState();
+      closeEditModal();
+      renderAll();
+    }
+
+    function populateGroupSelects() {
+      const opts = state.groups.map(g => `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join('');
+      const curIn = document.getElementById('inputGroup').value;
+      document.getElementById('inputGroup').innerHTML = opts;
+      if (state.groups.includes(curIn)) document.getElementById('inputGroup').value = curIn;
+      document.getElementById('editGroup').innerHTML = opts;
+
+      const printSelect = document.getElementById('printScopeSelect');
+      const curPrint = printSelect.value;
+      printSelect.innerHTML = `
+        <option value="ALL_GROUPED">Alle Warengruppen zusammen (gruppiert)</option>
+        <option value="ALL_FLAT">Alle Warengruppen zusammen (Gesamtliste)</option>
+        <option value="ALL_SUMMARY">Nur Warengruppen-Summen (ohne Einzelartikel)</option>
+        <optgroup label="Einzelne Warengruppe drucken">
+          ${state.groups.map(g => `<option value="GROUP:${escapeHtml(g)}">Nur: ${escapeHtml(g)}</option>`).join('')}
+        </optgroup>
+      `;
+      if ([...printSelect.options].some(o => o.value === curPrint)) {
+        printSelect.value = curPrint;
+      }
+    }
+
+    function addNewGroupInline() {
+      const name = prompt('Neue Warengruppe:');
+      if (!name || !name.trim()) return;
+      const clean = name.trim();
+      if (!state.groups.includes(clean)) {
+        state.groups.push(clean);
+        saveState();
+        populateGroupSelects();
+      }
+      document.getElementById('inputGroup').value = clean;
+      renderAll();
+    }
+
+    function openSettingsModal() {
+      document.getElementById('settingsStoreNameInput').value = state.storeName;
+      applyLogoUI();
+      renderSettingsLists();
+      document.getElementById('settingsModal').classList.remove('hidden');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.add('hidden');
+    }
+
+    function renderSettingsLists() {
+      document.getElementById('groupCountBadge').textContent = `${state.groups.length} Gruppen`;
+
+      document.getElementById('settingsGroupList').innerHTML = state.groups.map((g, idx) => `
+        <div class="list-row-box">
+          <span style="font-weight:600;font-size:13px;">${escapeHtml(g)}</span>
+          <div style="display:flex;gap:4px;">
+            <button type="button" class="btn btn-sm" onclick="renameGroup(${idx})">Umbenennen</button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="deleteGroup(${idx})">Löschen</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addGroupFromModal() {
+      const input = document.getElementById('newGroupInput');
+      const clean = (input.value || '').trim();
+      if (!clean) return;
+      if (!state.groups.includes(clean)) {
+        state.groups.push(clean);
+        saveState();
+        populateGroupSelects();
+        renderSettingsLists();
+        renderAll();
+      }
+      input.value = '';
+    }
+
+    function renameGroup(idx) {
+      const oldName = state.groups[idx];
+      const next = prompt('Neuer Name für Warengruppe:', oldName);
+      if (!next || !next.trim() || next.trim() === oldName) return;
+      const clean = next.trim();
+      if (state.groups.includes(clean)) return alert('Name existiert bereits.');
+      state.groups[idx] = clean;
+      state.items.forEach(i => { if (i.group === oldName) i.group = clean; });
+      if (state.selectedGroupFilter === oldName) state.selectedGroupFilter = clean;
+      saveState();
+      populateGroupSelects();
+      renderSettingsLists();
+      renderAll();
+    }
+
+    function deleteGroup(idx) {
+      if (state.groups.length <= 1) return alert('Mindestens eine Warengruppe nötig.');
+      const target = state.groups[idx];
+      const fallback = state.groups.find((_, i) => i !== idx);
+      if (!confirm(`Warengruppe "${target}" löschen?`)) return;
+      state.items.forEach(i => { if (i.group === target) i.group = fallback; });
+      state.groups.splice(idx, 1);
+      if (state.selectedGroupFilter === target) state.selectedGroupFilter = 'ALL';
+      saveState();
+      populateGroupSelects();
+      renderSettingsLists();
+      renderAll();
+    }
+
+    function renderAll() {
+      renderGroupPills();
+      renderInventoryTable();
+      renderPrintPreview();
+    }
+
+    function setGroupFilter(g) {
+      state.selectedGroupFilter = g;
+      renderGroupPills();
+      renderInventoryTable();
+    }
+
+    function renderGroupPills() {
+      let html = `
+        <button type="button" class="pill-btn ${state.selectedGroupFilter === 'ALL' ? 'active' : ''}" onclick="setGroupFilter('ALL')">
+          Alle (${state.items.length})
+        </button>
+      `;
+      state.groups.forEach(g => {
+        const count = state.items.filter(i => i.group === g).length;
+        html += `
+          <button type="button" class="pill-btn ${state.selectedGroupFilter === g ? 'active' : ''}" onclick="setGroupFilter('${escapeHtml(g)}')">
+            ${escapeHtml(g)} (${count})
+          </button>
+        `;
+      });
+      document.getElementById('groupFilterPills').innerHTML = html;
+      document.getElementById('quickPrintBtnLabel').textContent =
+        state.selectedGroupFilter === 'ALL' ? 'Alle Warengruppen drucken' : `Nur "${state.selectedGroupFilter}" drucken`;
+    }
+
+    function getFilteredItems() {
+      const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+      return state.items.filter(item => {
+        const mg = state.selectedGroupFilter === 'ALL' || item.group === state.selectedGroupFilter;
+        const mq = !q || item.name.toLowerCase().includes(q) || item.group.toLowerCase().includes(q);
+        return mg && mq;
+      });
+    }
+
+    function renderInventoryTable() {
+      const filtered = getFilteredItems();
+      const tbody = document.getElementById('inventoryTableBody');
+      const tfoot = document.getElementById('inventoryTableFoot');
+      const empty = document.getElementById('emptyState');
+
+      let totalUnits = 0;
+      let totalValue = 0;
+      filtered.forEach(item => {
+        totalUnits += item.qty;
+        totalValue += item.qty * item.price;
+      });
+
+      const activeGroups = new Set(state.items.map(i => i.group));
+      document.getElementById('kpiGroupLabel').textContent = state.selectedGroupFilter === 'ALL' ? 'Alle Gruppen' : state.selectedGroupFilter;
+      document.getElementById('kpiArticles').textContent = formatInt(filtered.length);
+      document.getElementById('kpiTotalUnits').textContent = formatInt(totalUnits);
+      document.getElementById('kpiTotalValue').textContent = formatCurrency(totalValue);
+      document.getElementById('kpiActiveGroups').textContent = activeGroups.size;
+      document.getElementById('kpiTotalGroupsHint').textContent = `von ${state.groups.length} Kategorien`;
+
+      if (!filtered.length) {
+        tbody.innerHTML = '';
+        tfoot.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      tbody.innerHTML = filtered.map(item => {
+        const gOpts = state.groups.map(g => `<option value="${escapeHtml(g)}" ${g === item.group ? 'selected' : ''}>${escapeHtml(g)}</option>`).join('');
+        return `
+          <tr>
+            <td><input type="text" class="inline-input" value="${escapeHtml(item.name)}" onchange="directSetName('${item.id}', this.value)" /></td>
+            <td><select class="inline-input" style="min-width:120px;" onchange="directSetGroup('${item.id}', this.value)">${gOpts}</select></td>
+            <td class="num">
+              <div style="display:inline-flex;align-items:center;gap:4px;">
+                <button type="button" class="btn btn-sm" onclick="quickChangeQty('${item.id}', -1)">−</button>
+                <input type="number" class="inline-qty tabular-nums" value="${item.qty}" min="0" onchange="directSetQty('${item.id}', this.value)" />
+                <button type="button" class="btn btn-sm" onclick="quickChangeQty('${item.id}', 1)">+</button>
+              </div>
+            </td>
+            <td class="num">
+              <input type="number" class="inline-price tabular-nums" value="${Number(item.price).toFixed(2)}" min="0" step="0.01" onchange="directSetPrice('${item.id}', this.value)" /> €
+            </td>
+            <td class="num tabular-nums" style="font-weight:700;">${formatCurrency(item.qty * item.price)}</td>
+            <td style="text-align:center;white-space:nowrap;">
+              <button type="button" class="btn btn-sm" onclick="openEditModal('${item.id}')">Edit</button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="deleteItem('${item.id}')">X</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      tfoot.innerHTML = `
+        <tr>
+          <td colspan="2">Summe (${filtered.length} Positionen)</td>
+          <td class="num tabular-nums">${formatInt(totalUnits)} Stk.</td>
+          <td></td>
+          <td class="num tabular-nums" style="color:#1d4ed8;">${formatCurrency(totalValue)}</td>
+          <td></td>
+        </tr>
+      `;
+    }
+
+    function switchTab(tab) {
+      const cap = document.getElementById('view-capture');
+      const prt = document.getElementById('view-print');
+      const bCap = document.getElementById('tab-capture');
+      const bPrt = document.getElementById('tab-print');
+
+      if (tab === 'capture') {
+        cap.classList.remove('hidden');
+        prt.classList.add('hidden');
+        bCap.classList.add('active');
+        bPrt.classList.remove('active');
+      } else {
+        cap.classList.add('hidden');
+        prt.classList.remove('hidden');
+        bPrt.classList.add('active');
+        bCap.classList.remove('active');
+        renderPrintPreview();
+      }
+    }
+
+    function goToPrintWithCurrentFilter() {
+      const sel = document.getElementById('printScopeSelect');
+      sel.value = state.selectedGroupFilter === 'ALL' ? 'ALL_GROUPED' : `GROUP:${state.selectedGroupFilter}`;
+      switchTab('print');
+    }
+
+    function renderPrintPreview() {
+      const scope = document.getElementById('printScopeSelect').value;
+      const storeName = document.getElementById('printStoreName').value || state.storeName;
+      const rawDate = document.getElementById('printDateInput').value;
+      const auditor = (document.getElementById('printAuditorName').value || '').trim();
+      const formattedDate = rawDate ? new Date(rawDate + 'T00:00:00').toLocaleDateString('de-DE') : new Date().toLocaleDateString('de-DE');
+      document.getElementById('headerDate').textContent = `Stichtag: ${formattedDate}`;
+
+      let items = [...state.items];
+      let subtitle = 'Alle Warengruppen zusammen (gruppiert)';
+      if (scope.startsWith('GROUP:')) {
+        const g = scope.replace('GROUP:', '');
+        items = state.items.filter(i => i.group === g);
+        subtitle = `Warengruppe: ${g}`;
+      } else if (scope === 'ALL_FLAT') {
+        subtitle = 'Alle Warengruppen zusammen (Gesamtliste)';
+      } else if (scope === 'ALL_SUMMARY') {
+        subtitle = 'Warengruppen-Summen (ohne Einzelartikel)';
+      }
+
+      let grandUnits = 0;
+      let grandValue = 0;
+      items.forEach(i => {
+        grandUnits += i.qty;
+        grandValue += i.qty * i.price;
+      });
+
+      let bodyHtml = '';
+      if (!items.length) {
+        bodyHtml = `<p style="text-align:center;color:#475569;padding:24px;">Keine Artikel für diese Auswahl vorhanden.</p>`;
+      } else if (scope === 'ALL_SUMMARY') {
+        const activeGroups = state.groups.filter(g => items.some(i => i.group === g));
+        const rows = activeGroups.map((g, idx) => {
+          const gItems = items.filter(i => i.group === g);
+          const gUnits = gItems.reduce((sum, i) => sum + i.qty, 0);
+          const gValue = gItems.reduce((sum, i) => sum + i.qty * i.price, 0);
+          return `
+            <tr>
+              <td>${idx + 1}</td>
+              <td><strong>${escapeHtml(g)}</strong></td>
+              <td class="num tabular-nums">${formatInt(gUnits)} Stk.</td>
+              <td class="num tabular-nums" style="font-weight:700;">${formatCurrency(gValue)}</td>
+            </tr>
+          `;
+        }).join('');
+        bodyHtml = `
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Warengruppe</th>
+                <th class="num">Menge</th>
+                <th class="num">Summe (EK)</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      } else if (scope === 'ALL_GROUPED') {
+        const activeGroups = state.groups.filter(g => items.some(i => i.group === g));
+        bodyHtml = activeGroups.map(g => {
+          const gItems = items.filter(i => i.group === g);
+          let gUnits = 0;
+          let gValue = 0;
+          const rows = gItems.map((item, idx) => {
+            const lineTotal = item.qty * item.price;
+            gUnits += item.qty;
+            gValue += lineTotal;
+            return `
+              <tr>
+                <td>${idx + 1}</td>
+                <td>${escapeHtml(item.name)}</td>
+                <td class="num tabular-nums">${formatInt(item.qty)}</td>
+                <td class="num tabular-nums">${formatCurrency(item.price)}</td>
+                <td class="num tabular-nums">${formatCurrency(lineTotal)}</td>
+              </tr>
+            `;
+          }).join('');
+          return `
+            <div class="print-group">
+              <div style="background:#0f172a;color:#ffffff;padding:6px 10px;font-weight:700;font-size:12px;">
+                ${escapeHtml(g)} (${gItems.length} Pos. / ${formatInt(gUnits)} Stk.)
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Artikel</th>
+                    <th class="num">Menge</th>
+                    <th class="num">EK / Stk.</th>
+                    <th class="num">Wert</th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+                <tfoot>
+                  <tr style="font-weight:700;background:#f8fafc;">
+                    <td colspan="2">Zwischensumme ${escapeHtml(g)}</td>
+                    <td class="num tabular-nums">${formatInt(gUnits)}</td>
+                    <td></td>
+                    <td class="num tabular-nums">${formatCurrency(gValue)}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          `;
+        }).join('');
+      } else {
+        const rows = items.map((item, idx) => `
+          <tr>
+            <td>${idx + 1}</td>
+            <td>${escapeHtml(item.name)}</td>
+            <td>${escapeHtml(item.group)}</td>
+            <td class="num tabular-nums">${formatInt(item.qty)}</td>
+            <td class="num tabular-nums">${formatCurrency(item.price)}</td>
+            <td class="num tabular-nums">${formatCurrency(item.qty * item.price)}</td>
+          </tr>
+        `).join('');
+        bodyHtml = `
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Artikel</th>
+                <th>Warengruppe</th>
+                <th class="num">Menge</th>
+                <th class="num">EK / Stk.</th>
+                <th class="num">Wert</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      }
+
+      const logoHtml = state.logoDataUrl
+        ? `<img src="${state.logoDataUrl}" alt="Logo" style="width:52px;height:52px;object-fit:cover;border-radius:8px;border:1px solid #cbd5e1;" />`
+        : '';
+
+      document.getElementById('printSheet').innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:2px solid #0f172a;padding-bottom:14px;margin-bottom:16px;">
+          <div style="display:flex;gap:12px;align-items:center;">
+            ${logoHtml}
+            <div>
+              <h1 style="margin:0;font-size:20px;">${escapeHtml(storeName)}</h1>
+              <div style="color:#475569;font-size:13px;">${escapeHtml(subtitle)}</div>
+            </div>
+          </div>
+          <div style="font-size:12px;text-align:right;">
+            <div><strong>Stichtag:</strong> ${formattedDate}</div>
+            ${auditor ? `<div><strong>Prüfer:</strong> ${escapeHtml(auditor)}</div>` : ''}
+          </div>
+        </div>
+
+        ${bodyHtml}
+
+        <div style="border-top:2px solid #0f172a;padding-top:12px;margin-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-weight:700;">
+          <span>Positionen: ${items.length} &bull; Gesamtmenge: ${formatInt(grandUnits)} Stk.</span>
+          <span style="color:#1d4ed8;">Gesamtwert (EK): ${formatCurrency(grandValue)}</span>
+        </div>
+      `;
+    }
+
+    function printDirect() {
+      const sheet = document.getElementById('printSheet');
+      if (!sheet) return;
+      renderPrintPreview();
+      const win = window.open('', '_blank');
+      if (!win) {
+        alert('Bitte Pop-ups in Safari erlauben und erneut tippen.');
+        return;
+      }
+      win.document.open();
+      win.document.write(`<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(state.storeName)} - Inventur</title>
+  <style>
+    @page { size: A4 portrait; margin: 12mm; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; color: #0f172a; margin: 0; padding: 12px; font-size: 13px; background: #ffffff; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+    th, td { border-bottom: 1px solid #cbd5e1; padding: 7px 8px; text-align: left; }
+    th { background: #f1f5f9; font-size: 11px; text-transform: uppercase; }
+    .num { text-align: right; }
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+    .print-group { break-inside: avoid; page-break-inside: avoid; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  ${sheet.innerHTML}
+  <script>
+    window.onload = function () {
+      setTimeout(function () {
+        window.print();
+      }, 250);
+    };
+  <\/script>
+</body>
+</html>`);
+      win.document.close();
+    }
+
+    function openCsvModal() {
+      document.getElementById('csvModal').classList.remove('hidden');
+    }
+
+    function closeCsvModal() {
+      document.getElementById('csvModal').classList.add('hidden');
+    }
+
+    function exportCsv() {
+      const headers = ['Artikelbezeichnung', 'Warengruppe', 'Bestand_Stueck', 'EK_EUR', 'Gesamtwert_EUR'];
+      const rows = state.items.map(i => [
+        `"${String(i.name).replace(/"/g, '""')}"`,
+        `"${String(i.group).replace(/"/g, '""')}"`,
+        i.qty,
+        Number(i.price).toFixed(2).replace('.', ','),
+        Number(i.qty * i.price).toFixed(2).replace('.', ',')
+      ].join(';'));
+      const csv = '\uFEFF' + [headers.join(';'), ...rows].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Kiosk_Inventur_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importCsvFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const lines = String(e.target.result || '').split(/\r?\n/).filter(l => l.trim());
+        let count = 0;
+        lines.forEach((line, idx) => {
+          if (idx === 0 && line.toLowerCase().includes('warengruppe')) return;
+          const parts = line.split(';').map(p => p.replace(/^"|"$/g, '').trim());
+          const [name, group, qtyRaw, priceRaw] = parts;
+          if (!name) return;
+          const cleanGroup = group || state.groups[0];
+          if (!state.groups.includes(cleanGroup)) state.groups.push(cleanGroup);
+          state.items.push({
+            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + idx,
+            name,
+            group: cleanGroup,
+            qty: parseInt(qtyRaw, 10) || 0,
+            price: parseFloat((priceRaw || '0').replace(',', '.')) || 0
+          });
+          count++;
+        });
+        saveState();
+        populateGroupSelects();
+        renderAll();
+        closeCsvModal();
+        alert(`${count} Artikel importiert.`);
+      };
+      reader.readAsText(file, 'UTF-8');
+    }
+
+    function loadDemoData() {
+      if (!confirm('Beispieldaten laden?')) return;
+      state.groups = [...DEFAULT_GROUPS];
+      state.items = [...DEMO_ITEMS];
+      state.selectedGroupFilter = 'ALL';
+      saveState();
+      populateGroupSelects();
+      renderAll();
+      closeCsvModal();
+      closeSettingsModal();
+    }
+
+    function clearAllData() {
+      if (!confirm('Alle Artikel löschen?')) return;
+      state.items = [];
+      saveState();
+      renderAll();
+      closeCsvModal();
+    }
+
+    init();
+  </script>
+</body>
+</html>
